@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LevelButtonControl : MonoBehaviour, IPointerClickHandler
+public class LevelButtonUIControl : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] LevelSceneControl _leveledControl;
         public void OnPointerClick(PointerEventData eventData)

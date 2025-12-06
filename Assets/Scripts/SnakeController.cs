@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -7,49 +8,62 @@ public class SnakeController : MonoBehaviour
 {
     [SerializeField] LevelSceneControl _levelControl;
     [SerializeField] GameObject _bodyPrefab;
-    public List<GameObject> _snakeSegments = new List<GameObject>();
-    public List<int> _snakeSegmentsFooting = new List<int>();
-    public bool _canMove = true;
+    public List<GameObject> snakeSegments = new List<GameObject>();
+    public List<int> isSnakeSegmentsFooting = new List<int>();
+    public bool canMove = true;
+    private bool _isFinish = false;
     [SerializeField] LayerMask Blocks;
     [SerializeField] LayerMask InteractiveObjects;
 
     private void Start()
     {
         transform.forward = Vector3.forward;
-        _snakeSegments.Add(gameObject);
-        AddBody(); 
+        snakeSegments.Add(gameObject);
+        AddBody();
     }
 
     private void Update()
     {
-        if (_canMove)
+        if (canMove && !_isFinish)
         {
             switch (true)
             {
-                case true when (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && transform.forward != Vector3.back && !IsObstacle—heck(gameObject, Vector3.forward):
-                    Move(Vector3.forward);
+                case true when (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && transform.forward != Vector3.back:
+                    Action(Vector3.forward, true);
                     break;
 
-                case true when (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && transform.forward != Vector3.right && !IsObstacle—heck(gameObject, Vector3.left):
-                    Move(Vector3.left);
+                case true when (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && transform.forward != Vector3.right:
+                    Action(Vector3.left, true);
                     break;
 
-                case true when (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && transform.forward != Vector3.forward && !IsObstacle—heck(gameObject, Vector3.back):
-                    Move(Vector3.back);
+                case true when (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && transform.forward != Vector3.forward:
+                    Action(Vector3.back, true);
                     break;
 
-                case true when (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && transform.forward != Vector3.left && !IsObstacle—heck(gameObject, Vector3.right):
-                    Move(Vector3.right);
+                case true when (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && transform.forward != Vector3.left:
+                    Action(Vector3.right, true);
                     break;
-               
+
                 case true when Input.GetKeyDown(KeyCode.Z):
                     AddBody();
                     break;
-                
+
                 case true when Input.GetKeyDown(KeyCode.X):
                     RemoveBody();
                     break;
             }
+        }
+    }
+
+    private void Action(Vector3 moveTo, bool isNeedAduit)
+    {
+        if (!isNeedAduit || !IsObstacle—heck(gameObject, moveTo))
+        {
+            GameObject _interactObject = ObstacleCheck(gameObject, moveTo, InteractiveObjects);
+
+            Move(moveTo);
+            ActionInteractiveObject(_interactObject);
+            IsFall();
         }
     }
 
@@ -59,8 +73,8 @@ public class SnakeController : MonoBehaviour
         Quaternion _pastRotation = transform.localRotation;
         Vector3 _temporaryPos;
         Quaternion _temporaryRot;
-        ActionInteractiveObject(moveTo);
-        foreach (GameObject segment in _snakeSegments)
+
+        foreach (GameObject segment in snakeSegments)
         {
             if (segment.name == "Head")
             {
@@ -76,58 +90,105 @@ public class SnakeController : MonoBehaviour
                 _pastPosition = _temporaryPos;
                 _pastRotation = _temporaryRot;
             }
-            if (IsObstacle—heck(segment, Vector3.down)) _snakeSegmentsFooting.Add(1);
-            else _snakeSegmentsFooting.Add(0);
+
         }
-        if (_snakeSegmentsFooting.Sum() == 0) FinishGame(false);
-        else _snakeSegmentsFooting.Clear();
-        GameObject _onFunish = ObstacleCheck(gameObject, Vector3.down, Blocks);
-        if (_onFunish && _onFunish.name == "Finish") FinishGame(true);
     }
 
-    private void ActionInteractiveObject(Vector3 rotation)
+    private void IsFall()
     {
-        GameObject _interactObject = ObstacleCheck(gameObject, rotation, InteractiveObjects);
-        Debug.Log(_interactObject);
+        foreach (GameObject segment in snakeSegments)
+        {
+            if (IsObstacle—heck(segment, Vector3.down)) isSnakeSegmentsFooting.Add(1);
+            else isSnakeSegmentsFooting.Add(0);
+        }
+        if (isSnakeSegmentsFooting.Sum() == 0)
+        {
+            FinishGame(false);
+            StartCoroutine(FallAnimation());
+        }
+            isSnakeSegmentsFooting.Clear();
+    }
+
+    private IEnumerator FallAnimation()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.25f);
+            foreach (GameObject segment in snakeSegments)
+            {
+                segment.transform.position += Vector3.down;
+            }
+
+        }
+    }
+   
+
+    private void ActionInteractiveObject(GameObject _interactObject)
+    {
         if (_interactObject)
         {
             switch (true)
             {
-                case true when _interactObject.name == "Apple":
+                case true when _interactObject.CompareTag("Apple"):
                     Destroy(_interactObject);
                     AddBody();
                     break;
-                
-                case true when _interactObject.name == "Bomb":
+
+                case true when _interactObject.CompareTag("Bomb"):
                     Destroy(_interactObject);
                     RemoveBody();
                     break;
-                
-                case true when _interactObject.name == "Booster":;
-                    Dash(_interactObject);
+
+                case true when _interactObject.CompareTag("Booster") && _interactObject.transform.forward != -gameObject.transform.forward:
+                    StartCoroutine(Dash(_interactObject));
                     break;
+
+                case true when _interactObject.CompareTag("Finish"):
+                    FinishGame(true);
+                    break;
+                
+                case true when _interactObject.CompareTag("Spike"):
+                    FinishGame(false);
+                    break;
+                
+                case true when _interactObject.CompareTag("Button"):
+                    _interactObject.GetComponent<InteractiveButton>().Action();
+                    break;
+
             }
         }
     }
 
     private void AddBody()
     {
-        GameObject _last = _snakeSegments[_snakeSegments.Count - 1];
+        GameObject _last = snakeSegments[snakeSegments.Count - 1];
         Vector3 _newPosition = _last.transform.localPosition - _last.transform.forward;
         GameObject _newBody = Instantiate(_bodyPrefab, _newPosition, _last.transform.localRotation, transform.parent);
-        _snakeSegments.Add(_newBody);
+        snakeSegments.Add(_newBody);
     }
 
     private void RemoveBody()
     {
-        GameObject _last = _snakeSegments[_snakeSegments.Count - 1];
-        _snakeSegments.RemoveAt(_snakeSegments.Count - 1);
+        GameObject _last = snakeSegments[snakeSegments.Count - 1];
+        snakeSegments.RemoveAt(snakeSegments.Count - 1);
         Destroy(_last);
     }
 
-    private void Dash(GameObject Booster)
+    private IEnumerator Dash(GameObject Booster)
     {
+        canMove = false;
+        while (!IsObstacle—heck(gameObject, Booster.transform.forward))
+        {
+            if (_isFinish) break;
+            yield return new WaitForSeconds(0.1f);
+            GameObject _interactObject = ObstacleCheck(gameObject, Booster.transform.forward, InteractiveObjects);
 
+            Move(Booster.transform.forward);
+            ActionInteractiveObject(_interactObject);
+        
+        }
+        canMove = true;
+        IsFall();
     }
 
     private bool IsObstacle—heck(GameObject segment, Vector3 direction)
@@ -146,7 +207,8 @@ public class SnakeController : MonoBehaviour
 
     private void FinishGame(bool isWin)
     {
-        _canMove = false;
+        canMove = false;
+        _isFinish = true;
         //_levelControl.EndLevelUI(isWin);
     }
 }

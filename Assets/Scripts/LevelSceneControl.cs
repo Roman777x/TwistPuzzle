@@ -31,6 +31,6 @@ public class LevelSceneControl : MonoBehaviour
     public void OpenLevelMenu()
     {
         _menu.SetActive(!_menu.activeSelf);
-        _snakeController._canMove = !_snakeController._canMove;
+        _snakeController.canMove = !_snakeController.canMove;
     }
 }

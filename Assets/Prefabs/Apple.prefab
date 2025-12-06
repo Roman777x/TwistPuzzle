@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6f845b74d80e16c489ca96658072e219, type: 3}
+      propertyPath: m_TagString
+      value: Apple
+      objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: 6f845b74d80e16c489ca96658072e219, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.9
