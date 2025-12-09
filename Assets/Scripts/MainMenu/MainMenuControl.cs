@@ -1,0 +1,58 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEditor;
+public class MainMenuControl : MonoBehaviour
+{
+    [SerializeField] GameObject ChaptelSelection;
+    [SerializeField] GameObject Settings;
+    [SerializeField] GameObject ForestLevels;
+
+    List<GameObject> OpenWindow = new List<GameObject>();
+
+    private void Start()
+    {
+        ChaptelSelection.SetActive(false);
+        Settings.SetActive(false);
+        ForestLevels.SetActive(false);
+    }
+
+    public void CloseLastWindows()
+    {
+        int _last = OpenWindow.Count - 1;
+        OpenWindow[_last].SetActive(false);
+        OpenWindow.RemoveAt(_last);
+    }
+    public void OpenChapterSelection()
+    {
+        ChaptelSelection.SetActive(true);
+        OpenWindow.Add(ChaptelSelection);
+    }
+
+    public void OpenSettings()
+    {
+        Settings.SetActive(true);
+        OpenWindow.Add(Settings);
+    }
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void OpenChapter(string Name)
+    {
+        
+        if (Name == "Forest")
+        {
+            ForestLevels.SetActive(true);
+            ForestLevels.GetComponentInChildren<CheckLevels>().Check();
+            OpenWindow.Add(ForestLevels);
+        }
+    }
+
+    public void LoadLevel(string levelNumper)
+    {
+        string chapter = OpenWindow[OpenWindow.Count - 1].name;
+        SceneManager.LoadScene(chapter + levelNumper);
+    }
+}

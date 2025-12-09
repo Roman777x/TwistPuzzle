@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StartScreanAnimation : MonoBehaviour
@@ -12,6 +13,8 @@ public class StartScreanAnimation : MonoBehaviour
 
     private void Awake()
     {
+        SaveManager.LoadOrCreate();
+        _logoAlpha.alpha = 0;
         _blackScreanAlpha.alpha = 1;
     }
     private void Start()
@@ -35,7 +38,7 @@ public class StartScreanAnimation : MonoBehaviour
             _blackScreanAlpha.alpha = Mathf.Lerp(1, 0, progres / _speed);
             yield return null;
         }
-        
+        SceneManager.LoadScene("MainMenu");
     }
 
     private IEnumerator LogoView(float from, float to)

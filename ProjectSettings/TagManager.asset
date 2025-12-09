@@ -9,6 +9,17 @@ TagManager:
   - Booster
   - Spike
   - Button
+  - MenuButton
+  - SettingsButton
+  - ExitButton
+  - RestartButton
+  - Start
+  - Back
+  - Settings
+  - Chapter
+  - LevelButton
+  - Shop
+  - Exit
   layers:
   - Default
   - TransparentFX
