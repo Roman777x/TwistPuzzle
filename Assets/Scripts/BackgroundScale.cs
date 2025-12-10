@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class BackgroundScale: MonoBehaviour
 {
-    Camera camera;
+    Camera _camera;
     private int distanceFromCamera = 100;
 
     void Start()
     {
-        camera = Camera.main;
-        transform.position = camera.transform.position + camera.transform.forward * distanceFromCamera;
+        _camera = Camera.main;
+        transform.position = _camera.transform.position + _camera.transform.forward * distanceFromCamera;
 
-        transform.rotation = camera.transform.rotation;
+        transform.rotation = _camera.transform.rotation;
 
-        float height = camera.orthographicSize * 2f;
-        float width = height * camera.aspect;
+        float height = _camera.orthographicSize * 2f;
+        float width = height * _camera.aspect;
 
         transform.localScale = new Vector3(width, height, 1f);
     }

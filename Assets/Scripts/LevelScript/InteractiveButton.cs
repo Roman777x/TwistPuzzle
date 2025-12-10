@@ -14,7 +14,7 @@ public class InteractiveButton : MonoBehaviour
         {
             foreach (GameObject box in _connectBox)
             {
-                box.SetActive(!box.activeSelf);
+                if (box) box.SetActive(!box.activeSelf);
             }
         _canActve = false;
         }

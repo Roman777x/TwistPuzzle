@@ -12,6 +12,9 @@ public class SnakeController : MonoBehaviour
     public List<GameObject> snakeSegments = new List<GameObject>();
     public List<int> isSnakeSegmentsFooting = new List<int>();
     public bool canMove = true;
+    private bool isFalling = false;
+    private int countFalls = 0;
+    private int maxCountFalls = 3;
     [SerializeField] LayerMask Blocks;
     [SerializeField] LayerMask InteractiveObjects;
     [SerializeField] int numberOfBody;
@@ -25,23 +28,23 @@ public class SnakeController : MonoBehaviour
 
     private void Update()
     {
-        if (canMove && !_levelControl.isFinish)
+        if (canMove && !_levelControl.isFinish && !isFalling)
         {
             switch (true)
             {
-                case true when (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && transform.forward != Vector3.back:
+                case true when (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && (transform.forward != Vector3.back || snakeSegments.Count == 1):
                     Action(Vector3.forward, true);
                     break;
 
-                case true when (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && transform.forward != Vector3.right:
+                case true when (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && (transform.forward != Vector3.right || snakeSegments.Count == 1):
                     Action(Vector3.left, true);
                     break;
 
-                case true when (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && transform.forward != Vector3.forward:
+                case true when (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && (transform.forward != Vector3.forward || snakeSegments.Count == 1):
                     Action(Vector3.back, true);
                     break;
 
-                case true when (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && transform.forward != Vector3.left:
+                case true when (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && (transform.forward != Vector3.left || snakeSegments.Count == 1):
                     Action(Vector3.right, true);
                     break;
 
@@ -101,15 +104,15 @@ public class SnakeController : MonoBehaviour
         {
             if (IsObstacle—heck(segment, Vector3.down)) isSnakeSegmentsFooting.Add(1);
             else isSnakeSegmentsFooting.Add(0);
-            canMove = true;
-
+            isFalling = false;
         }
         if (isSnakeSegmentsFooting.Sum() == 0)
         {
-            canMove = false;
+            isFalling = true;
             StartCoroutine(FallAnimation());
         }
-            isSnakeSegmentsFooting.Clear();
+        else countFalls = 0;
+        isSnakeSegmentsFooting.Clear();
     }
 
     private IEnumerator FallAnimation()
@@ -120,6 +123,8 @@ public class SnakeController : MonoBehaviour
         {
             segment.transform.position += Vector3.down;
         }
+        countFalls++;
+        if (countFalls == maxCountFalls) FinishGame(false);
         ActionInteractiveObject(_interactObject);
         IsFall();
     }
@@ -178,7 +183,7 @@ public class SnakeController : MonoBehaviour
 
     private IEnumerator Dash(GameObject Booster)
     {
-        canMove = false;
+        isFalling = true;
         while (!IsObstacle—heck(gameObject, Booster.transform.forward))
         {
             if (_levelControl.isFinish) break;
@@ -189,7 +194,7 @@ public class SnakeController : MonoBehaviour
             ActionInteractiveObject(_interactObject);
         
         }
-        canMove = true;
+        isFalling = false;
         IsFall();
     }
 
@@ -211,6 +216,6 @@ public class SnakeController : MonoBehaviour
     {
         canMove = false;
         _levelControl.isFinish = isWin;
-        if (isWin) _levelControl.ComplitLevel();
+        _levelControl.ComplitLevel(isWin);
     }
 }

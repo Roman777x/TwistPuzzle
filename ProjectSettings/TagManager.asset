@@ -7,7 +7,6 @@ TagManager:
   - Apple
   - Bomb
   - Booster
-  - Spike
   - Button
   - MenuButton
   - SettingsButton
@@ -20,6 +19,9 @@ TagManager:
   - LevelButton
   - Shop
   - Exit
+  - Spike
+  - NextLevelButton
+  - NextLevel
   layers:
   - Default
   - TransparentFX

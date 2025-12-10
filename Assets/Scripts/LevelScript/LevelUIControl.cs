@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class LevelUIControl : MonoBehaviour, IPointerClickHandler
 {
@@ -28,6 +29,10 @@ public class LevelUIControl : MonoBehaviour, IPointerClickHandler
             
             case true when gameObject.CompareTag("ExitButton"):
                 _levelControl.ExitToMainmenu();
+                break;
+            
+            case true when gameObject.CompareTag("NextLevelButton"):
+                _levelControl.NextLevel();
                 break;
 
         }

@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class LevelControl : MonoBehaviour
 {
 
-    [SerializeField] SnakeController _snakeController;
+    SnakeController _snakeController;
     [SerializeField] GameObject _background;
     [SerializeField] GameObject _menu;
     [SerializeField] GameObject _settings;
+    [SerializeField] GameObject _victory;
+    [SerializeField] GameObject _fail;
     public bool isFinish = false;
 
     private void Awake()
@@ -48,19 +50,28 @@ public class LevelControl : MonoBehaviour
         _settings.SetActive(false);
         _snakeController.canMove = !_snakeController.canMove;
     }
-    
+
     public void Settings()
     {
         _settings.SetActive(!_settings.activeSelf);
     }
 
-    public void ComplitLevel()
+    public void ComplitLevel(bool isWin)
     {
-        GameData.CompliteForestLevels[SceneManager.GetActiveScene().name] = true;
-        SceneManager.LoadScene("MainMenu");
+        if (isWin)
+        {
+            GameData.CompliteForestLevels[SceneManager.GetActiveScene().name] = true;
+            _victory.SetActive(true);
+        }
+        else _fail.SetActive(true);
     }
     public void ExitToMainmenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void NextLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
