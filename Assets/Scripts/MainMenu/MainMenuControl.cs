@@ -1,7 +1,10 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEditor;
+
 public class MainMenuControl : MonoBehaviour
 {
     [SerializeField] GameObject ChaptelSelection;
@@ -44,6 +47,7 @@ public class MainMenuControl : MonoBehaviour
     }
     public void QuitGame()
     {
+        SaveManager.Save();
         Application.Quit();
     }
 

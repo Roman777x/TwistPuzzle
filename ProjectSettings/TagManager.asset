@@ -22,6 +22,7 @@ TagManager:
   - Spike
   - NextLevelButton
   - NextLevel
+  - DeleteData
   layers:
   - Default
   - TransparentFX

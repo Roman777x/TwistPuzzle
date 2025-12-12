@@ -11,6 +11,7 @@ public class LevelControl : MonoBehaviour
     [SerializeField] GameObject _menu;
     [SerializeField] GameObject _settings;
     [SerializeField] GameObject _victory;
+    [SerializeField] GameObject _nextLevelButton;
     [SerializeField] GameObject _fail;
     public bool isFinish = false;
 
@@ -35,6 +36,9 @@ public class LevelControl : MonoBehaviour
                     break;
                 case true when Input.GetKeyDown(KeyCode.Escape):
                     Menu();
+                    break;
+                case true when Input.GetKeyDown(KeyCode.Y):
+                    ComplitLevel(true);
                     break;
             }
         }
@@ -65,6 +69,9 @@ public class LevelControl : MonoBehaviour
         {
             GameData.CompliteForestLevels[SceneManager.GetActiveScene().name] = true;
             _victory.SetActive(true);
+            if (SceneManager.GetActiveScene().name == "Forest15") 
+                _nextLevelButton.SetActive(false);
+
         }
         else _fail.SetActive(true);
     }

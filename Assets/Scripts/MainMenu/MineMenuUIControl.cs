@@ -22,18 +22,27 @@ public class MineMenuUIControl : MonoBehaviour, IPointerClickHandler
             case true when gameObject.CompareTag("Settings"):
                 MainMenuControl.OpenSettings();
                 break;
+
             case true when gameObject.CompareTag("Shop"):
                 MainMenuControl.OpenShop();
                 break;
+
             case true when gameObject.CompareTag("Exit"):
                 MainMenuControl.QuitGame();
                 break;
+
             case true when gameObject.CompareTag("Chapter"):
                 MainMenuControl.OpenChapter(gameObject.name);
                 break;
+
             case true when gameObject.CompareTag("LevelButton"):
                 MainMenuControl.LoadLevel(gameObject.transform.parent.name);
                 break;
+            
+            case true when gameObject.CompareTag("DeleteData"):
+                SaveManager.ResetSave();
+                break;
+
         }
     }
 }

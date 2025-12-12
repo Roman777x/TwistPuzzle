@@ -29,8 +29,23 @@ public static class SaveManager
             GameData.CompliteForestLevels = new Dictionary<string, bool>(DefaultData.CompliteForestLevels);
         }
     }
+    
+    public static void Save()
+    {
+        SaveData data = new SaveData
+        {
+            CompliteForestLevels = GameData.CompliteForestLevels
+        };
 
+        string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+        File.WriteAllText(Path, json);
+    }
+    public static void ResetSave()
+    {
+        if (File.Exists(Path))
+            File.Delete(Path);
 
-
-
+        GameData.CompliteForestLevels =
+            new Dictionary<string, bool>(DefaultData.CompliteForestLevels);
+    }
 }
