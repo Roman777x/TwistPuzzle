@@ -6,6 +6,7 @@ public class MainMenuControl : MonoBehaviour
 {
     [SerializeField] GameObject ChaptelSelection;
     [SerializeField] GameObject Settings;
+    [SerializeField] GameObject Shop;
     [SerializeField] GameObject ForestLevels;
 
     List<GameObject> OpenWindow = new List<GameObject>();
@@ -14,6 +15,7 @@ public class MainMenuControl : MonoBehaviour
     {
         ChaptelSelection.SetActive(false);
         Settings.SetActive(false);
+        Shop.SetActive(false);
         ForestLevels.SetActive(false);
     }
 
@@ -33,6 +35,12 @@ public class MainMenuControl : MonoBehaviour
     {
         Settings.SetActive(true);
         OpenWindow.Add(Settings);
+    }
+
+    public void OpenShop()
+    {
+        Shop.SetActive(true);
+        OpenWindow.Add(Shop);
     }
     public void QuitGame()
     {

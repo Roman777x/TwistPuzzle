@@ -13,6 +13,7 @@ public class SnakeController : MonoBehaviour
     public List<int> isSnakeSegmentsFooting = new List<int>();
     public bool canMove = true;
     private bool isFalling = false;
+    private bool isDashing = false;
     private int countFalls = 0;
     private int maxCountFalls = 3;
     [SerializeField] LayerMask Blocks;
@@ -28,7 +29,7 @@ public class SnakeController : MonoBehaviour
 
     private void Update()
     {
-        if (canMove && !_levelControl.isFinish && !isFalling)
+        if (canMove && !_levelControl.isFinish && !isFalling && !isDashing)
         {
             switch (true)
             {
@@ -183,8 +184,8 @@ public class SnakeController : MonoBehaviour
 
     private IEnumerator Dash(GameObject Booster)
     {
-        isFalling = true;
-        while (!IsObstacle—heck(gameObject, Booster.transform.forward))
+        isDashing = true;
+        while (!IsObstacle—heck(gameObject, Booster.transform.forward) && canMove)
         {
             if (_levelControl.isFinish) break;
             yield return new WaitForSeconds(0.1f);
@@ -192,9 +193,9 @@ public class SnakeController : MonoBehaviour
 
             Move(Booster.transform.forward);
             ActionInteractiveObject(_interactObject);
-        
+            if (_interactObject && _interactObject.CompareTag("Booster")) break;
         }
-        isFalling = false;
+        isDashing = false;
         IsFall();
     }
 

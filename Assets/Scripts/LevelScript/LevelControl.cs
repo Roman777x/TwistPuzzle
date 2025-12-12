@@ -20,6 +20,8 @@ public class LevelControl : MonoBehaviour
         _background.SetActive(false);
         _menu.SetActive(false);
         _settings.SetActive(false);
+        _victory.SetActive(false);
+        _fail.SetActive(false);
     }
 
     private void Update()
@@ -58,6 +60,7 @@ public class LevelControl : MonoBehaviour
 
     public void ComplitLevel(bool isWin)
     {
+        _background.SetActive(true);
         if (isWin)
         {
             GameData.CompliteForestLevels[SceneManager.GetActiveScene().name] = true;

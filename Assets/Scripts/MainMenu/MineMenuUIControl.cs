@@ -22,6 +22,9 @@ public class MineMenuUIControl : MonoBehaviour, IPointerClickHandler
             case true when gameObject.CompareTag("Settings"):
                 MainMenuControl.OpenSettings();
                 break;
+            case true when gameObject.CompareTag("Shop"):
+                MainMenuControl.OpenShop();
+                break;
             case true when gameObject.CompareTag("Exit"):
                 MainMenuControl.QuitGame();
                 break;
