@@ -48,14 +48,6 @@ public class SnakeController : MonoBehaviour
                 case true when (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && (transform.forward != Vector3.left || snakeSegments.Count == 1):
                     Action(Vector3.right, true);
                     break;
-
-                case true when Input.GetKeyDown(KeyCode.Z):
-                    AddBody();
-                    break;
-
-                case true when Input.GetKeyDown(KeyCode.X):
-                    RemoveBody();
-                    break;
             }
         }
     }

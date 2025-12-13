@@ -37,9 +37,6 @@ public class LevelControl : MonoBehaviour
                 case true when Input.GetKeyDown(KeyCode.Escape):
                     Menu();
                     break;
-                case true when Input.GetKeyDown(KeyCode.Y):
-                    ComplitLevel(true);
-                    break;
             }
         }
     }
