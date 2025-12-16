@@ -62,15 +62,23 @@ public class LevelControl : MonoBehaviour
     public void ComplitLevel(bool isWin)
     {
         _background.SetActive(true);
-        if (isWin)
+        if (SceneManager.GetActiveScene().name != "DEMO SCREAN")
         {
-            GameData.CompliteForestLevels[SceneManager.GetActiveScene().name] = true;
-            _victory.SetActive(true);
-            if (SceneManager.GetActiveScene().name == "Forest15") 
-                _nextLevelButton.SetActive(false);
+            if (isWin)
+            {
+                GameData.CompliteForestLevels[SceneManager.GetActiveScene().name] = true;
+                _victory.SetActive(true);
+                if (SceneManager.GetActiveScene().name == "Forest15")
+                    _nextLevelButton.SetActive(false);
 
+            }
+            else _fail.SetActive(true);
         }
-        else _fail.SetActive(true);
+        else
+        {
+            if (isWin) _victory.SetActive(true);
+            else _fail.SetActive(true);
+        }
     }
     public void ExitToMainmenu()
     {

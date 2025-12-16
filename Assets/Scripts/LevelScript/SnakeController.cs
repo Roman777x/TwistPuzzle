@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class SnakeController : MonoBehaviour
 {
@@ -34,27 +35,35 @@ public class SnakeController : MonoBehaviour
             switch (true)
             {
                 case true when (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && (transform.forward != Vector3.back || snakeSegments.Count == 1):
-                    Action(Vector3.forward, true);
+                    Action(Vector3.forward);
                     break;
 
                 case true when (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && (transform.forward != Vector3.right || snakeSegments.Count == 1):
-                    Action(Vector3.left, true);
+                    Action(Vector3.left);
                     break;
 
                 case true when (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && (transform.forward != Vector3.forward || snakeSegments.Count == 1):
-                    Action(Vector3.back, true);
+                    Action(Vector3.back);
                     break;
 
                 case true when (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && (transform.forward != Vector3.left || snakeSegments.Count == 1):
-                    Action(Vector3.right, true);
+                    Action(Vector3.right);
+                    break;
+
+                case true when (SceneManager.GetActiveScene().name == "DEMO SCREAN" && Input.GetKeyDown(KeyCode.Z)):
+                    AddBody();
+                    break;
+                
+                case true when (SceneManager.GetActiveScene().name == "DEMO SCREAN" && Input.GetKeyDown(KeyCode.X)):
+                    RemoveBody();
                     break;
             }
         }
     }
 
-    private void Action(Vector3 moveTo, bool isNeedAduit)
+    private void Action(Vector3 moveTo)
     {
-        if (!isNeedAduit || !IsObstacle—heck(gameObject, moveTo))
+        if (!IsObstacle—heck(gameObject, moveTo))
         {
             GameObject _interactObject = ObstacleCheck(gameObject, moveTo, InteractiveObjects);
 
